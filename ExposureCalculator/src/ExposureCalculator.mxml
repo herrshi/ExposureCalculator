@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx" 
+					   width="600" height="400" fontFamily="微软雅黑">
+	
+	<fx:Script>
+		<![CDATA[
+			protected function btnSetFeatureFunction_clickHandler(event:MouseEvent):void
+			{
+				var D1:Number = Number( txtD1.text );
+				var D2:Number = Number( txtD2.text );
+				var lgE1:Number = Number( txtlgE1.text );
+				var lgE2:Number = Number( txtlgE2.text );
+				
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+	</fx:Declarations>
+	
+	<mx:TabNavigator width="100%" height="100%">
+		<s:NavigatorContent label="计算曝光量比值Ψ">
+			<s:VGroup width="100%" height="100%" paddingTop="5" gap="5">
+				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" gap="3">
+					<s:Label text="D1: "/>
+					<s:TextInput id="txtD1" width="50" text="2.0" restrict="0-9."/>
+					<s:Spacer width="20"/>
+					<s:Label text="D2: "/>
+					<s:TextInput id="txtD2" width="50" text="3.0" restrict="0-9."/>
+					<s:Spacer width="20"/>
+					<s:Label text="lgE1: "/>
+					<s:TextInput id="txtlgE1" width="50" text="2.3" restrict="0-9."/>
+					<s:Spacer width="20"/>
+					<s:Label text="lgE2: "/>
+					<s:TextInput id="txtlgE2" width="50" text="2.49" restrict="0-9."/>
+					<s:Spacer width="20"/>
+					<s:Button id="btnSetFeatureFunction" label="建立特性曲线方程" 
+							  click="btnSetFeatureFunction_clickHandler(event)"/>
+				</s:HGroup>
+				
+			</s:VGroup>
+		</s:NavigatorContent>
+		
+		<s:NavigatorContent label="建全曝光曲线方程">
+			
+		</s:NavigatorContent>
+		
+		<s:NavigatorContent label="计算曝光量比值Ψ＇">
+			
+		</s:NavigatorContent>
+		
+		<s:NavigatorContent label="比较Ψ和Ψ＇">
+			
+		</s:NavigatorContent>
+	</mx:TabNavigator>
+</s:WindowedApplication>
