@@ -6,7 +6,6 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import mx.controls.Alert;
 			
 			[Bindable]
 			private var _getFeatureFunction:Boolean = false;
@@ -21,7 +20,7 @@
 				var lgE2:Number = Number( txtlgE2.text );
 				if ( D1 == D2 || lgE1 == lgE2 )
 				{
-					Alert.show( "特征曲线尚未建立。" );
+					txtPsiResult.text += "特征曲线方程尚未建立\n";
 				}
 				else
 				{
@@ -31,7 +30,7 @@
 					_psiB = lgE1 - _psiK * D1;
 					_psiK = Math.round( _psiK * 100 ) / 100;
 					_psiB = Math.round( _psiB * 100 ) / 100;
-					lblFeatureFunction.text = "lgE=" + _psiK.toString() + "D+" + _psiB.toString();
+					txtPsiResult.text += "特征曲线方程: lgE=" + _psiK.toString() + "D+" + _psiB.toString() + "\n";
 				}
 			}
 			
@@ -45,7 +44,8 @@
 				var lgEx:Number = _psiK * Dx + _psiB;
 				var lgEy:Number = _psiK * Dy + _psiB;
 				_psi = Math.pow( 10, ( lgEy - lgEx ) );
-				lblPsiValue.text = "Ψ=" + _psi.toFixed( 2 );
+				txtPsiResult.text += "lgEx=" + lgEx.toString() + ", lgEy=" + lgEy.toString() + "\n";
+				txtPsiResult.text += "Ψ=" + _psi.toFixed( 2 ) + "\n";
 			}
 			
 		]]>
@@ -56,30 +56,37 @@
 	</fx:Declarations>
 	
 	<mx:TabNavigator width="100%" height="100%">
-		<s:NavigatorContent label="计算曝光量比值Ψ">
-			<s:VGroup width="100%" height="100%" paddingTop="5" gap="15">
-				<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" gap="3">
-					<s:Label text="D1: "/>
-					<s:TextInput id="txtD1" width="50" text="2.0" restrict="0-9."/>
-					<s:Spacer width="20"/>
-					<s:Label text="D2: "/>
-					<s:TextInput id="txtD2" width="50" text="3.0" restrict="0-9."/>
-					<s:Spacer width="20"/>
-					<s:Label text="lgE1: "/>
-					<s:TextInput id="txtlgE1" width="50" text="2.3" restrict="0-9."/>
-					<s:Spacer width="20"/>
-					<s:Label text="lgE2: "/>
-					<s:TextInput id="txtlgE2" width="50" text="2.49" restrict="0-9."/>
-					<s:Spacer width="20"/>
-					<s:Button id="btnSetFeatureFunction" label="建立特性曲线方程" 
-							  click="btnSetFeatureFunction_clickHandler(event)"/>
-				</s:HGroup>
+		<s:NavigatorContent label="计算曝光量比值Ψ" height="100%" width="100%">
+			<s:layout>
+				<s:VerticalLayout/>
+			</s:layout>
+			
+			<s:Panel width="100%" height="50%" title="输入参数：">
+				<s:layout>
+					<s:VerticalLayout paddingLeft="5" paddingTop="5"/>
+				</s:layout>
 				
-				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" gap="3" 
-						  fontSize="15" fontWeight="bold">
-					<s:Label text="特性曲线方程: "/>
-					<s:Label id="lblFeatureFunction"/>
-				</s:HGroup>
+				<s:Group width="100%" height="30" >
+					<s:Label width="20" text="D1: " 
+							 left="5" verticalCenter="0"/>
+					<s:TextInput id="txtD1" width="50" text="2.0" restrict="0-9." 
+								 left="25" verticalCenter="0"/>
+					<s:Label width="20" text="D2: " 
+							 left="90" verticalCenter="0"/>
+					<s:TextInput id="txtD2" width="50" text="3.0" restrict="0-9." 
+								 left="115" verticalCenter="0"/>
+					<s:Label text="lgE1: " 
+							 left="15" verticalCenter="0" visible="false"/>
+					<s:TextInput id="txtlgE1" width="50" text="2.3" restrict="0-9." 
+								 left="15" verticalCenter="0" visible="false"/>
+					<s:Label text="lgE2: " 
+							 left="15" verticalCenter="0" visible="false"/>
+					<s:TextInput id="txtlgE2" width="50" text="2.49" restrict="0-9." 
+								 left="15" verticalCenter="0" visible="false"/>
+					<s:Button id="btnSetFeatureFunction" label="建立特性曲线方程" 
+							  click="btnSetFeatureFunction_clickHandler(event)" 
+							  left="15" verticalCenter="0" visible="false"/>
+				</s:Group>
 				
 				<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" gap="3" 
 						  enabled="{_getFeatureFunction}">
@@ -92,12 +99,11 @@
 					<s:Button id="btnGetPsi" label="计算曝光量比值" 
 							  click="btnGetPsi_clickHandler(event)"/>
 				</s:HGroup>
-				
-				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" gap="3"
-						  fontSize="15" fontWeight="bold">
-					<s:Label id="lblPsiValue" text=""/>
-				</s:HGroup>
-			</s:VGroup>
+			</s:Panel>
+			
+			<s:Panel width="100%" height="50%" title="输出结果：">
+				<s:TextArea id="txtPsiResult" width="100%" height="100%" editable="false"/>
+			</s:Panel>
 		</s:NavigatorContent>
 		
 		<s:NavigatorContent label="建全曝光曲线方程">
