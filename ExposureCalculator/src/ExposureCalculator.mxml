@@ -6,14 +6,48 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
+			
+			[Bindable]
+			private var _getFeatureFunction:Boolean = false;
+			private var _psiK:Number;
+			private var _psiB:Number;
+			
 			protected function btnSetFeatureFunction_clickHandler(event:MouseEvent):void
 			{
 				var D1:Number = Number( txtD1.text );
 				var D2:Number = Number( txtD2.text );
 				var lgE1:Number = Number( txtlgE1.text );
 				var lgE2:Number = Number( txtlgE2.text );
-				
+				if ( D1 == D2 || lgE1 == lgE2 )
+				{
+					Alert.show( "特征曲线尚未建立。" );
+				}
+				else
+				{
+					_getFeatureFunction = true;
+					
+					_psiK = ( lgE2 - lgE1 ) / ( D2 - D1 );
+					_psiB = lgE1 - _psiK * D1;
+					_psiK = Math.round( _psiK * 100 ) / 100;
+					_psiB = Math.round( _psiB * 100 ) / 100;
+					lblFeatureFunction.text = "lgE=" + _psiK.toString() + "D+" + _psiB.toString();
+				}
 			}
+			
+			private var _psi:Number;
+			
+			protected function btnGetPsi_clickHandler(event:MouseEvent):void
+			{
+				var Dx:Number = Number( txtDx.text );
+				var Dy:Number = Number( txtDy.text );
+				
+				var lgEx:Number = _psiK * Dx + _psiB;
+				var lgEy:Number = _psiK * Dy + _psiB;
+				_psi = Math.pow( 10, ( lgEy - lgEx ) );
+				lblPsiValue.text = "Ψ=" + _psi.toFixed( 2 );
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -23,8 +57,8 @@
 	
 	<mx:TabNavigator width="100%" height="100%">
 		<s:NavigatorContent label="计算曝光量比值Ψ">
-			<s:VGroup width="100%" height="100%" paddingTop="5" gap="5">
-				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" gap="3">
+			<s:VGroup width="100%" height="100%" paddingTop="5" gap="15">
+				<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" gap="3">
 					<s:Label text="D1: "/>
 					<s:TextInput id="txtD1" width="50" text="2.0" restrict="0-9."/>
 					<s:Spacer width="20"/>
@@ -41,6 +75,28 @@
 							  click="btnSetFeatureFunction_clickHandler(event)"/>
 				</s:HGroup>
 				
+				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" gap="3" 
+						  fontSize="15" fontWeight="bold">
+					<s:Label text="特性曲线方程: "/>
+					<s:Label id="lblFeatureFunction"/>
+				</s:HGroup>
+				
+				<s:HGroup width="100%" horizontalAlign="left" verticalAlign="middle" gap="3" 
+						  enabled="{_getFeatureFunction}">
+					<s:Label text="Dx: "/>
+					<s:TextInput id="txtDx" width="50" text="2.5" restrict="0-9."/>
+					<s:Spacer width="20"/>
+					<s:Label text="Dy: "/>
+					<s:TextInput id="txtDy" width="50" text="3.5" restrict="0-9."/>
+					<s:Spacer width="20"/>
+					<s:Button id="btnGetPsi" label="计算曝光量比值" 
+							  click="btnGetPsi_clickHandler(event)"/>
+				</s:HGroup>
+				
+				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" gap="3"
+						  fontSize="15" fontWeight="bold">
+					<s:Label id="lblPsiValue" text=""/>
+				</s:HGroup>
 			</s:VGroup>
 		</s:NavigatorContent>
 		
